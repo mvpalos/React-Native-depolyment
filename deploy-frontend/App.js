@@ -1,14 +1,20 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { AppRegistry, StyleSheet, Text, View } from 'react-native';
+import {NativeRouter, Switch, Route} from 'react-router-native'
+import SignIn from './comps/SignIn.js';
+import Home from './comps/Home.js';
 
 export default class App extends React.Component {
   render() {
     return (
+      <NativeRouter>
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
+        <Switch>
+          <Route exact path = '/' component = {SignIn} />
+          <Route exact path = '/home' render = {(props) => <Home history = {props.history}/>}/>
+        </Switch>
       </View>
+      </NativeRouter>
     );
   }
 }
@@ -21,3 +27,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+AppRegistry.registerComponent('App', () => App);
