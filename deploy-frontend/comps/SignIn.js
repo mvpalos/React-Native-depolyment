@@ -1,5 +1,5 @@
 import React from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 import { AppRegistry, StyleSheet, Text, View, TextInput } from 'react-native';
 
 export default class SignIn extends React.Component{
@@ -70,7 +70,7 @@ removeErrorHandler(){
     render(){
         return(
             <View>
-                <Text style = {styles.title}>Welcome</Text>
+                <Text style = {styles.title}>Hello.</Text>
                 <TextInput style = {styles.entryText} placeholder = "Username" />
                 <TextInput style = {styles.entryText} placeholder = "Password" />
 
