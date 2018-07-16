@@ -1,6 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import { AppRegistry, StyleSheet, Text, View, TextInput, AsyncStorage } from 'react-native';
+import { AppRegistry, 
+         StyleSheet, 
+         Text, 
+         View, 
+         TextInput, 
+         AsyncStorage } from 'react-native';
 import {Link} from 'react-router-native'
 
 
@@ -57,7 +62,7 @@ removeErrorHandler(){
 
                 <Text style = {styles.button}>Sign In</Text>
                 
-                <Link to = 'http://localhost:8080/register'>
+                <Link to = '/register'>
                 <Text style = {styles.registerButton}>Register</Text>
                 </Link>
             </View>

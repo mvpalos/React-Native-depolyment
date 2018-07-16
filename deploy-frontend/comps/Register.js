@@ -1,9 +1,74 @@
 import React from 'react';
-import {Text, AppRegistry, View, StyleSheet, TextInput} from 'react-native';
+import {Text, 
+        AppRegistry, 
+        View, 
+        StyleSheet, 
+        TextInput,
+        AsyncStorage} from 'react-native';
 import {Link} from 'react-router-native'
 import axios from 'axios';
 
 export default class Register extends React.Component {
+    constructor(props){
+        super(props);
+        this.state ={
+            error:[]
+        };
+        this.registerHandler = this.registerHandler.bind(this);
+        this.removeErrorHandler = this.removeErrorHandler.bind(this);
+    }
+
+componentWillMount(){
+         axios.post('http://localhost:8080/validtoken',({jwt:AsyncStorage.getItem("jwt")}))
+         .then((result)=>{
+             if(!result.data.error){
+                 this.props.history.push("/feed");
+             }
+         })
+         .catch((err)=>{
+             console.log(err);
+         })
+    }
+
+registerHandler(e){
+    e.preventDefault();
+
+    if (e.target.username && e.target.password)
+    {
+        axios.post("http://localhost:8080/register", {
+            username: e.target.username.value,
+            password: e.target.password.value
+        })
+        .then((results) =>
+        {
+            if (!results.data.error)
+            {
+                if (results.data.jwt)
+                {
+                    AsyncStorage.setItem("jwt", results.data.jwt);
+                    this.props.history.push("/home");
+                }
+            }
+            else
+            {
+                this.setState({
+                    error: results.data.reason
+                });
+            }
+        })
+        .catch((error) =>
+        {
+            console.log(error);
+        });
+    }
+}
+
+removeErrorHandler(){
+    this.setState({
+        error: []
+    })
+}
+
 
     render(){
         return(
