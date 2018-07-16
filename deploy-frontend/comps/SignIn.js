@@ -8,7 +8,7 @@ export default class SignIn extends React.Component{
 
     componentWillMount()
     {
-        axios.post('/validtoken',({jwt:AsyncStorage.getItem("jwt")}))
+        axios.post('http://localhost:8080/validtoken',({jwt:AsyncStorage.getItem("jwt")}))
         .then((result)=>{
             if(!result.data.error){
                 this.props.history.push("/home");
@@ -21,7 +21,7 @@ export default class SignIn extends React.Component{
 
     handleSubmit = (event)=> {
         event.preventDefault(); 
-        axios.post('/login', {
+        axios.post('http://localhost:8080/login', {
             userName: event.target.userName.value, 
             password: event.target.password.value
             })
@@ -57,7 +57,7 @@ removeErrorHandler(){
 
                 <Text style = {styles.button}>Sign In</Text>
                 
-                <Link to = '/register'>
+                <Link to = 'http://localhost:8080/register'>
                 <Text style = {styles.registerButton}>Register</Text>
                 </Link>
             </View>

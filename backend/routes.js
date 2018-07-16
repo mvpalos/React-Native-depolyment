@@ -13,7 +13,7 @@ const secret = process.argv[2];
 router.use(cors());
 router.use(bodyParser.urlencoded({extended: false}));
 router.use(bodyParser.json());
-router.use(express.static(__dirname+'/build'));
+router.use(express.static(__dirname+'/index.js'));
 
                 User.find({})
                     .then((results) =>
@@ -27,7 +27,7 @@ router.use(express.static(__dirname+'/build'));
 //giving validation token to endpoint /validatetoken
 //'secret' represents the jwt token encrypted
 
-router.post('/validtoken', (req, res)=>{
+router.post('http://localhost:8080/validtoken', (req, res)=>{
     jwt.verify(req.body.jwt, secret, (error, payload)=>{
         if(!error){
             res.json({error:false, alias: payload.alias});
@@ -38,7 +38,7 @@ router.post('/validtoken', (req, res)=>{
     });
 });
 
-router.post('/register', (req, res)=>{
+router.post('http://localhost:8080/register', (req, res)=>{
     //check if form are filled out as strings
     if(typeof req.body.username === "string" && typeof req.body.password == "string"){
         //checking both forms are filled
@@ -106,7 +106,7 @@ router.post('/register', (req, res)=>{
 
 
 //if acount is already set, and signing in through the login
-router.post('/login',(req, res)=>{
+router.post('http://localhost:8080/login',(req, res)=>{
 if(typeof req.body.userName ==='string' && typeof req.body.password === 'string'){
     //look for the username
     User.findOne({username: req.body.userName.toLowerCase()})
