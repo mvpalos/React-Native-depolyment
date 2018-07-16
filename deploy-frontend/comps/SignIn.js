@@ -1,65 +1,46 @@
 import React from 'react';
 import axios from 'axios';
-import { AppRegistry, StyleSheet, Text, View, TextInput, TouchableHighlight, AsyncStorage } from 'react-native';
+import { AppRegistry, StyleSheet, Text, View, TextInput, AsyncStorage } from 'react-native';
+import {Link} from 'react-router-native'
+
 
 export default class SignIn extends React.Component{
-    constructor(){
-        super();
-        this.state = {
-           error: []
-        };
-        this.registerHandler = this.registerHandler.bind(this);
-        this.removeErrorHandler = this.removeErrorHandler.bind(this);
+
+    componentWillMount()
+    {
+        axios.post('/validtoken',({jwt:AsyncStorage.getItem("jwt")}))
+        .then((result)=>{
+            if(!result.data.error){
+                this.props.history.push("/home");
+            }
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
     }
 
-    componentWillMount(){
-         //checking validity of JWT (authoritization token)
-         axios.post('/validtoken',({jwt:AsyncStorage.getItem("jwt")}))
-         .then((result)=>{
-             //if there username or password is not sending an error,(account isnt made)
-             //push the props(of all forms filled) to changing browser endpoint of '/feed'
-             if(!result.data.error){
-                 this.props.history.push("/home");
-             }
-         })
-         //send error if there is existing account
-         .catch((err)=>{
-             console.log(err);
-         })
-  }
-
-registerHandler(e){
-   e.preventDefault();
-
-   if (e.target.username && e.target.password)
-   {
-       axios.post("/register", {
-           username: e.target.username.value,
-           password: e.target.password.value
-       })
-       .then((results) =>
-       {
-           if (!results.data.error)
-           {
-               if (results.data.jwt)
-               {
-                   localStorage.setItem("jwt", results.data.jwt);
-                   this.props.history.push("/home");
-               }
-           }
-           else
-           {
-               this.setState({
-                   error: results.data.reason
-               });
-           }
-       })
-       .catch((error) =>
-       {
-           console.log(error);
-       });
-   }
-}
+    handleSubmit = (event)=> {
+        event.preventDefault(); 
+        axios.post('/login', {
+            userName: event.target.userName.value, 
+            password: event.target.password.value
+            })
+            .then((result)=>{
+                if(!result.data.error){
+                    if(result.data.jwt){
+                        AsyncStorage.setItem("jwt", result.data.jwt);
+                        this.props.history.push('/home');
+                    }
+                }
+                else {
+                    console.log("Failed to login");
+                }
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
+ 
+    }
 
 removeErrorHandler(){
    this.setState({
@@ -69,21 +50,27 @@ removeErrorHandler(){
 
     render(){
         return(
-            <View>
+            <View style = {styles.container}> 
                 <Text style = {styles.title}>Login</Text>
                 <TextInput style = {styles.entryText} placeholder = "Username"/>
-                <TextInput style = {styles.entryText} placeholder = "Password"/>
+                <TextInput style = {styles.entryText} secureTextEntry = {true} placeholder = "Password"/>
 
-                <TouchableHighlight stlye = {styles.buttonText} onPress >
                 <Text style = {styles.button}>Sign In</Text>
-
-                </TouchableHighlight>
+                
+                <Link to = '/register'>
+                <Text style = {styles.registerButton}>Register</Text>
+                </Link>
             </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        paddingHorizontal: 10
+    },
     title: {
         fontSize: 50,
         padding: 50,
@@ -98,17 +85,18 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontSize: 18,
-        color: 'black',
-        alignSelf: 'center'
+        color: 'black'
     },
     button: {
+        alignItems: 'center',
+        backgroundColor: '#DDDDDD',
+        padding: 10,
+        width: 80
+    },
+    registerButton: {
         height: 40,
-        backgroundColor: '#48BBEC',
         borderColor: '#48BBEC',
-        marginLeft: 10,
-        width: 80,
-        alignSelf: 'stretch',
-        justifyContent: 'center'
+        padding: 50
     }
 
 });

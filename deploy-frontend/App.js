@@ -3,6 +3,7 @@ import { AppRegistry, StyleSheet, Text, View } from 'react-native';
 import {NativeRouter, Switch, Route} from 'react-router-native'
 import SignIn from './comps/SignIn.js';
 import Home from './comps/Home.js';
+import Register from './comps/Register'
 
 export default class App extends React.Component {
   render() {
@@ -12,6 +13,7 @@ export default class App extends React.Component {
         <Switch>
           <Route exact path = '/' component = {SignIn} />
           <Route exact path = '/home' render = {(props) => <Home history = {props.history}/>}/>
+          <Route exact path = '/register' component = {Register} />
         </Switch>
       </View>
       </NativeRouter>
