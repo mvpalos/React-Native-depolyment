@@ -14,10 +14,20 @@ const Form = t.form.Form;
 
 const User = t.struct({
     username: t.String,
-    password: t.String
+    password: t.String,
+    retypePassword: t.String,
 });
 
-const options = {};
+const options = {
+    fields: {
+        password:{
+            secureTextEntry: true
+        },
+        retypePassword: {
+            secureTextEntry: true
+        }
+    }
+};
 
 export default class Register extends React.Component{
     constructor(props){
@@ -32,7 +42,7 @@ export default class Register extends React.Component{
         axios.post('http://localhost:8080/validtoken',({jwt:AsyncStorage.getItem("jwt")}))
         .then((result)=>{
             if(!result.data.error){
-                this.props.history.push("/feed");
+                this.props.history.push("/home");
             }
         })
         .catch((err)=>{

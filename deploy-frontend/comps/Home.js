@@ -11,7 +11,7 @@ export default class Home extends React.Component{
 
     render(){
         return(
-            <Text>This is the Home Page </Text>
+            <Text>YOU FIGURED IT OUT </Text>
         )
     }
 }

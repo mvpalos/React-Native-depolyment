@@ -4,20 +4,32 @@ import { AppRegistry,
          StyleSheet, 
          Text, 
          View, 
-         Button,
-         TextInput, 
+         Button, 
          AsyncStorage } from 'react-native';
 import {Link} from 'react-router-native';
+import t from 'tcomb-form-native';
 
+const Form = t.form.Form;
+const User = t.struct({
+      username: t.String,
+      password: t.String
+});
 
-const options = {};
+const options = {
+    fields: {
+        password: {
+            secureTextEntry: true
+        }
+    }
+};
 
 
 export default class SignIn extends React.Component{
     constructor(){
         super();
+        this.getValue = this.getValue.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
-
     componentWillMount(){
         axios.post('http://localhost:8080/validtoken',({jwt:AsyncStorage.getItem("jwt")}))
         .then((result)=>{
@@ -30,10 +42,16 @@ export default class SignIn extends React.Component{
         })
     }
 
+getValue(){
+    this.refs.form.getValue()
+    "Username: " + this.refs.form.getValue().username,
+    "Password: " + this.refs.form.getValue().password
+}
+
     handleSubmit = (event)=> { 
         axios.post('http://localhost:8080/login', {
-            userName: refs.userName.value, 
-            password: refs.password.value
+            username: this.refs.form.getValue().username, 
+            password: this.refs.form.getValue().password
             })
             .then((result)=>{
                 if(!result.data.error){
@@ -63,10 +81,14 @@ removeErrorHandler(){
             <View style = {styles.container}>
 
                 <Text style = {styles.title}>Login</Text>
-                <TextInput style = {styles.entryText} placeholder = "Username"/>
-                <TextInput style = {styles.entryText} secureTextEntry = {true} placeholder = "Password"/>
-                
-                {/* <Button onPress = {this.handleSubmit}>Sign in</Button> */}
+
+                <Form 
+                ref = "form"
+                type = {User}
+                options = {options}
+                />
+
+                <Button  onPress = {this.handleSubmit} title = "Login"/>
 
                 <Link to = '/register'>
                 <Text style = {styles.registerButton}>Register</Text>
