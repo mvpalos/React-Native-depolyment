@@ -66,7 +66,7 @@ removeErrorHandler(){
                 <TextInput style = {styles.entryText} placeholder = "Username"/>
                 <TextInput style = {styles.entryText} secureTextEntry = {true} placeholder = "Password"/>
                 
-                <Button onPress = {this.handleSubmit}>Sign in</Button>
+                {/* <Button onPress = {this.handleSubmit}>Sign in</Button> */}
 
                 <Link to = '/register'>
                 <Text style = {styles.registerButton}>Register</Text>
