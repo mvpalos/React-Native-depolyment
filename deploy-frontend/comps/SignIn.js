@@ -82,11 +82,7 @@ removeErrorHandler(){
 
                 <Text style = {styles.title}>Login</Text>
 
-                <Form 
-                ref = "form"
-                type = {User}
-                options = {options}
-                />
+                <Form ref = "form" type = {User} options = {options} />
 
                 <Button  onPress = {this.handleSubmit} title = "Login"/>
 
