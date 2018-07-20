@@ -4,15 +4,21 @@ import { AppRegistry,
          StyleSheet, 
          Text, 
          View, 
+         Button,
          TextInput, 
          AsyncStorage } from 'react-native';
-import {Link} from 'react-router-native'
+import {Link} from 'react-router-native';
+
+
+const options = {};
 
 
 export default class SignIn extends React.Component{
+    constructor(){
+        super();
+    }
 
-    componentWillMount()
-    {
+    componentWillMount(){
         axios.post('http://localhost:8080/validtoken',({jwt:AsyncStorage.getItem("jwt")}))
         .then((result)=>{
             if(!result.data.error){
@@ -24,11 +30,10 @@ export default class SignIn extends React.Component{
         })
     }
 
-    handleSubmit = (event)=> {
-        event.preventDefault(); 
+    handleSubmit = (event)=> { 
         axios.post('http://localhost:8080/login', {
-            userName: event.target.userName.value, 
-            password: event.target.password.value
+            userName: refs.userName.value, 
+            password: refs.password.value
             })
             .then((result)=>{
                 if(!result.data.error){
@@ -55,13 +60,14 @@ removeErrorHandler(){
 
     render(){
         return(
-            <View style = {styles.container}> 
+            <View style = {styles.container}>
+
                 <Text style = {styles.title}>Login</Text>
                 <TextInput style = {styles.entryText} placeholder = "Username"/>
                 <TextInput style = {styles.entryText} secureTextEntry = {true} placeholder = "Password"/>
-
-                <Text style = {styles.button}>Sign In</Text>
                 
+                <Button onPress = {this.handleSubmit}>Sign in</Button>
+
                 <Link to = '/register'>
                 <Text style = {styles.registerButton}>Register</Text>
                 </Link>
@@ -87,16 +93,6 @@ const styles = StyleSheet.create({
         borderWidth: .45,
         borderColor: '#48BBEC',
         borderRadius: 1
-    },
-    buttonText: {
-        fontSize: 18,
-        color: 'black'
-    },
-    button: {
-        alignItems: 'center',
-        backgroundColor: '#DDDDDD',
-        padding: 10,
-        width: 80
     },
     registerButton: {
         height: 40,

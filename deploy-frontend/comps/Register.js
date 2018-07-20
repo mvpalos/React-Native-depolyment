@@ -7,6 +7,14 @@ import {Text,
         AsyncStorage} from 'react-native';
 import {Link} from 'react-router-native'
 import axios from 'axios';
+import t from 'tcomb-form-native';
+
+const From = t.form.Form
+
+let Register = t.structure({
+    username: t.String,
+    password: t.String
+})
 
 export default class Register extends React.Component {
     constructor(props){
@@ -31,13 +39,10 @@ componentWillMount(){
     }
 
 registerHandler(e){
-    e.preventDefault();
-
-    if (e.target.username && e.target.password)
-    {
         axios.post("http://localhost:8080/register", {
-            username: e.target.username.value,
-            password: e.target.password.value
+            username: this.refs.forms.getValue().username,
+            password: this.refs.forms.getValue().password
+
         })
         .then((results) =>
         {
@@ -60,7 +65,7 @@ registerHandler(e){
         {
             console.log(error);
         });
-    }
+    
 }
 
 removeErrorHandler(){
@@ -75,9 +80,17 @@ removeErrorHandler(){
             <View>
             <Text style = {styles.title}>Register</Text>
 
-            <TextInput style = {styles.entryText} placeholder = "Username"/>
+            <Form 
+            ref = "form"
+            type = {Register}
+            options = {options}
+            />
+
+            <Button onPress = {this.getValue} title = "Submit"/>
+
+            {/* <TextInput style = {styles.entryText} placeholder = "Username"/>
             <TextInput style = {styles.entryText} secureTextEntry = {true} placeholder = "Password"/>
-            <TextInput style = {styles.entryText} secureTextEntry = {true} placeholder = "Re-type Password"/>
+            <TextInput style = {styles.entryText} secureTextEntry = {true} placeholder = "Re-type Password"/> */}
             
             <Link to = '/'><Text style = {styles.backButton}>back</Text></Link>
             </View>

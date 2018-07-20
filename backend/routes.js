@@ -13,7 +13,7 @@ const secret = process.argv[2];
 router.use(cors());
 router.use(bodyParser.urlencoded({extended: false}));
 router.use(bodyParser.json());
-router.use(express.static(__dirname+'/index.js'));
+// router.use(express.static(__dirname+'/build'));
 
                 User.find({})
                     .then((results) =>
@@ -24,8 +24,6 @@ router.use(express.static(__dirname+'/index.js'));
                     {
                         console.log(error);
                     });
-//giving validation token to endpoint /validatetoken
-//'secret' represents the jwt token encrypted
 
 router.post('http://localhost:8080/validtoken', (req, res)=>{
     jwt.verify(req.body.jwt, secret, (error, payload)=>{
