@@ -25,7 +25,7 @@ router.use(bodyParser.json());
                         console.log(error);
                     });
 
-router.post('http://localhost:8080/validtoken', (req, res)=>{
+router.post('/validtoken', (req, res)=>{
     jwt.verify(req.body.jwt, secret, (error, payload)=>{
         if(!error){
             res.json({error:false, alias: payload.alias});
@@ -36,10 +36,11 @@ router.post('http://localhost:8080/validtoken', (req, res)=>{
     });
 });
 
-router.post('http://localhost:8080/register', (req, res)=>{
-    if(typeof req.body.username === "string" && typeof req.body.password == "string"){
-        if(req.body.username && req.body.password){
-            if(req.body.username.trim() && req.body.username.trim().length <= 15){
+router.post('/register', (req, res)=>{
+    if(typeof req.body.username === "string" && typeof req.body.password == "string" && typeof req.body.retypePassword == "string"){
+        if(req.body.username && req.body.password && req.body.retypePassword){
+            if(req.body.username.trim() && req.body.username.trim().length && req.body.retypePassword.trim() <= 15){
+                if(req.body.password === req.body.retypePassword){
                 User.findOne({username: req.body.username.trim().toLowerCase()})
                     .then((result)=>{
                         if(result){
@@ -81,6 +82,10 @@ router.post('http://localhost:8080/register', (req, res)=>{
                 else
                 {
                     res.json({error: true, reason: "Please choose a valid username."});
+                    }
+                }
+                else{
+                    res.json({error: true, reason: "Passwords did not match."})
                 }
             }
             else{
@@ -92,7 +97,7 @@ router.post('http://localhost:8080/register', (req, res)=>{
         }
     });
 
-router.post('http://localhost:8080/login',(req, res)=>{
+router.post('/login',(req, res)=>{
 if(typeof req.body.userName ==='string' && typeof req.body.password === 'string'){
     User.findOne({username: req.body.userName.toLowerCase()})
         .then((result)=>{

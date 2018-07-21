@@ -10,6 +10,7 @@ import {Link} from 'react-router-native';
 import t from 'tcomb-form-native';
 
 const Form = t.form.Form;
+
 const User = t.struct({
       username: t.String,
       password: t.String
@@ -17,8 +18,12 @@ const User = t.struct({
 
 const options = {
     fields: {
+        username: {
+            error: 'please type in username'
+        },
         password: {
-            secureTextEntry: true
+            secureTextEntry: true,
+            error: 'please type in password'
         }
     }
 };
