@@ -5,9 +5,11 @@ import { AppRegistry,
          Text, 
          View, 
          Button, 
-         AsyncStorage } from 'react-native';
-import {Link} from 'react-router-native';
+         AsyncStorage,
+         } from 'react-native';
+import {Link, Redirect} from 'react-router-native';
 import t from 'tcomb-form-native';
+import Register from './Register.js'
 
 const Form = t.form.Form;
 
@@ -32,26 +34,18 @@ const options = {
 export default class SignIn extends React.Component{
     constructor(){
         super();
-        this.getValue = this.getValue.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        //this.registerRedirect = this.registerRedirect.bind(this);
     }
     componentWillMount(){
         axios.post('http://localhost:8080/validtoken',({jwt:AsyncStorage.getItem("jwt")}))
         .then((result)=>{
-            if(!result.data.error){
-                this.props.history.push("/home");
-            }
+            
         })
         .catch((err)=>{
             console.log(err);
         })
     }
-
-getValue(){
-    this.refs.form.getValue()
-    "Username: " + this.refs.form.getValue().username,
-    "Password: " + this.refs.form.getValue().password
-}
 
     handleSubmit = (event)=> { 
         axios.post('http://localhost:8080/login', {
@@ -62,7 +56,6 @@ getValue(){
                 if(!result.data.error){
                     if(result.data.jwt){
                         AsyncStorage.setItem("jwt", result.data.jwt);
-                        this.props.history.push('/home');
                     }
                 }
                 else {
@@ -81,6 +74,10 @@ removeErrorHandler(){
    })
 }
 
+// registerRedirect(){
+//     return require('./Register.js')
+// }
+
     render(){
         return(
             <View style = {styles.container}>
@@ -90,9 +87,10 @@ removeErrorHandler(){
                 <Form ref = "form" type = {User} options = {options} />
 
                 <Button  onPress = {this.handleSubmit} title = "Login"/>
+                <Button  onPress = {()=> navigator.push(registerRedirect())} title = "Register"/>
 
                 <Link to = '/register'>
-                <Text style = {styles.registerButton}>Register</Text>
+                <Text style = {styles.registerButton} accessibilityLabel="Learn more about this purple button" >Register</Text>
                 </Link>
             </View>
         )
@@ -121,6 +119,7 @@ const styles = StyleSheet.create({
         height: 40,
         borderColor: '#48BBEC',
         padding: 50
+
     }
 
 });

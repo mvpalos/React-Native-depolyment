@@ -50,13 +50,11 @@ export default class Register extends React.Component{
         })
    }
 
-registerHandler(e){
+registerHandler(){
        axios.post("http://localhost:8080/register", {
            username: this.refs.forms.getValue().username,
            password: this.refs.forms.getValue().password,
            retypePassword: this.refs.forms.getValue().retypePassword
-
-
        })
        .then((results) =>
        {

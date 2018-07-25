@@ -39,7 +39,7 @@ router.post('/validtoken', (req, res)=>{
 router.post('/register', (req, res)=>{
     if(typeof req.body.username === "string" && typeof req.body.password == "string" && typeof req.body.retypePassword == "string"){
         if(req.body.username && req.body.password && req.body.retypePassword){
-            if(req.body.username.trim() && req.body.username.trim().length && req.body.retypePassword.trim() <= 15){
+            if(req.body.username.trim() && req.body.username.trim().length <= 20 && req.body.retypePassword.trim() <= 15){
                 if(req.body.password === req.body.retypePassword){
                 User.findOne({username: req.body.username.trim().toLowerCase()})
                     .then((result)=>{

@@ -4,11 +4,13 @@ import {NativeRouter, Switch, Route} from 'react-router-native'
 import SignIn from './comps/SignIn.js';
 import Home from './comps/Home.js';
 import Register from './comps/Register.js';
+import createBrowserHistory from "history/createBrowserHistory";
+const history = createBrowserHistory();
 
 export default class App extends React.Component {
   render() {
     return (
-      <NativeRouter>
+      <NativeRouter history={history}>
       <View style={styles.container}>
         <Switch>
           <Route exact path = '/' component = {SignIn} />
